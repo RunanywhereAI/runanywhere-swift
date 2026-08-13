@@ -45,7 +45,7 @@ import PackageDescription
 // Version of the remote XCFramework release archives on runanywhere-sdks.
 // Kept in lockstep with this repo's git tag by the monorepo release tooling
 // (bindings/swift/scripts/sync-checksums.sh).
-let sdkVersion = "0.20.17"
+let sdkVersion = "0.20.18"
 
 let binaryBaseURL =
     "https://github.com/RunanywhereAI/runanywhere-sdks/releases/download/v\(sdkVersion)"
@@ -395,7 +395,7 @@ let package = Package(
         .binaryTarget(
             name: "RACommonsBinary",
             url: "\(binaryBaseURL)/RACommons-ios-v\(sdkVersion).zip",
-            checksum: "47f586b701200ed8d4ac7f9d15158bb0fe952b9fcff0a7b8f9612cb533c2cb7b"
+            checksum: "c58e0618eccd7af0f24543172ee2801600696a8fe2c688a6a08f2637d63ecdc1"
         ),
         .binaryTarget(
             name: "RABackendLlamaCPPBinary",
@@ -410,12 +410,12 @@ let package = Package(
         .binaryTarget(
             name: "RABackendSherpaBinary",
             url: "\(binaryBaseURL)/RABackendSherpa-ios-v\(sdkVersion).zip",
-            checksum: "45f61892097ea266308c8a6043c6882cb703885aa014dc474eb8fc46c8630b58"
+            checksum: "95d0621fab7b99200acaca05cd3feceeaf36949751cceafc84e7a1bf7d3cf1ad"
         ),
         .binaryTarget(
             name: "RABackendNeuRTBinary",
             url: "\(binaryBaseURL)/RABackendNeuRT-ios-v\(sdkVersion).zip",
-            checksum: "b85d91f0a6b24ffaa21affa5bc7cb9e5300451dfd2ae876af77c00972374e74d"
+            checksum: "b68886c1f954809c31b556ee7daaa2ddec52da942857164cc445224333feaa1c"
         ),
         .binaryTarget(
             name: "RABackendMLXBinary",
