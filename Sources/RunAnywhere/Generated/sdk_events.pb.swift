@@ -2374,6 +2374,14 @@ public nonisolated struct RAVoiceLifecycleEvent: @unchecked Sendable {
     set {_uniqueStorage()._processingDurationMs = newValue}
   }
 
+  /// The TTS counterpart to real_time_factor (18). rac_telemetry_tts_payload_t
+  /// has carried this field all along; without a home on the wire the value
+  /// emit_tts_synthesis_completed was handed had nowhere to go.
+  public var charactersPerSecond: Double {
+    get {_storage._charactersPerSecond}
+    set {_uniqueStorage()._charactersPerSecond = newValue}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -4250,7 +4258,7 @@ nonisolated extension RAGenerationEvent: SwiftProtobuf.Message, SwiftProtobuf._M
 
 nonisolated extension RAVoiceLifecycleEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".VoiceLifecycleEvent"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}kind\0\u{3}session_id\0\u{1}text\0\u{1}confidence\0\u{3}response_text\0\u{3}audio_base64\0\u{3}duration_ms\0\u{3}audio_level\0\u{2}\u{4}error\0\u{3}model_id\0\u{3}model_name\0\u{3}input_audio_duration_ms\0\u{3}input_audio_bytes\0\u{3}word_count\0\u{3}real_time_factor\0\u{1}language\0\u{3}sample_rate\0\u{3}is_streaming\0\u{1}framework\0\u{3}character_count\0\u{3}output_audio_duration_ms\0\u{3}output_audio_bytes\0\u{3}processing_duration_ms\0\u{c}\u{9}\u{1}\u{c}\u{a}\u{1}\u{c}\u{b}\u{1}")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}kind\0\u{3}session_id\0\u{1}text\0\u{1}confidence\0\u{3}response_text\0\u{3}audio_base64\0\u{3}duration_ms\0\u{3}audio_level\0\u{2}\u{4}error\0\u{3}model_id\0\u{3}model_name\0\u{3}input_audio_duration_ms\0\u{3}input_audio_bytes\0\u{3}word_count\0\u{3}real_time_factor\0\u{1}language\0\u{3}sample_rate\0\u{3}is_streaming\0\u{1}framework\0\u{3}character_count\0\u{3}output_audio_duration_ms\0\u{3}output_audio_bytes\0\u{3}processing_duration_ms\0\u{3}characters_per_second\0\u{c}\u{9}\u{1}\u{c}\u{a}\u{1}\u{c}\u{b}\u{1}")
 
   fileprivate class _StorageClass {
     var _kind: RAVoiceEventKind = .unspecified
@@ -4276,6 +4284,7 @@ nonisolated extension RAVoiceLifecycleEvent: SwiftProtobuf.Message, SwiftProtobu
     var _outputAudioDurationMs: Int64 = 0
     var _outputAudioBytes: Int64 = 0
     var _processingDurationMs: Int64 = 0
+    var _charactersPerSecond: Double = 0
 
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
@@ -4309,6 +4318,7 @@ nonisolated extension RAVoiceLifecycleEvent: SwiftProtobuf.Message, SwiftProtobu
       _outputAudioDurationMs = source._outputAudioDurationMs
       _outputAudioBytes = source._outputAudioBytes
       _processingDurationMs = source._processingDurationMs
+      _charactersPerSecond = source._charactersPerSecond
     }
   }
 
@@ -4350,6 +4360,7 @@ nonisolated extension RAVoiceLifecycleEvent: SwiftProtobuf.Message, SwiftProtobu
         case 24: try { try decoder.decodeSingularInt64Field(value: &_storage._outputAudioDurationMs) }()
         case 25: try { try decoder.decodeSingularInt64Field(value: &_storage._outputAudioBytes) }()
         case 26: try { try decoder.decodeSingularInt64Field(value: &_storage._processingDurationMs) }()
+        case 27: try { try decoder.decodeSingularDoubleField(value: &_storage._charactersPerSecond) }()
         default: break
         }
       }
@@ -4427,6 +4438,9 @@ nonisolated extension RAVoiceLifecycleEvent: SwiftProtobuf.Message, SwiftProtobu
       if _storage._processingDurationMs != 0 {
         try visitor.visitSingularInt64Field(value: _storage._processingDurationMs, fieldNumber: 26)
       }
+      if _storage._charactersPerSecond.bitPattern != 0 {
+        try visitor.visitSingularDoubleField(value: _storage._charactersPerSecond, fieldNumber: 27)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -4459,6 +4473,7 @@ nonisolated extension RAVoiceLifecycleEvent: SwiftProtobuf.Message, SwiftProtobu
         if _storage._outputAudioDurationMs != rhs_storage._outputAudioDurationMs {return false}
         if _storage._outputAudioBytes != rhs_storage._outputAudioBytes {return false}
         if _storage._processingDurationMs != rhs_storage._processingDurationMs {return false}
+        if _storage._charactersPerSecond != rhs_storage._charactersPerSecond {return false}
         return true
       }
       if !storagesAreEqual {return false}

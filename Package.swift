@@ -45,7 +45,7 @@ import PackageDescription
 // Version of the remote XCFramework release archives on runanywhere-sdks.
 // Kept in lockstep with this repo's git tag by the monorepo release tooling
 // (bindings/swift/scripts/sync-checksums.sh).
-let sdkVersion = "0.20.19"
+let sdkVersion = "0.20.24"
 
 let binaryBaseURL =
     "https://github.com/RunanywhereAI/runanywhere-sdks/releases/download/v\(sdkVersion)"
@@ -395,27 +395,27 @@ let package = Package(
         .binaryTarget(
             name: "RACommonsBinary",
             url: "\(binaryBaseURL)/RACommons-ios-v\(sdkVersion).zip",
-            checksum: "4cf87da6d9bcb979effa11575cbb24ef489300b794bb02fda96d9c4db21b4a36"
+            checksum: "0609dae68dc9b477daa70c8fa17c266a98a288eb0b712c3d77184e93d7ad1e71"
         ),
         .binaryTarget(
             name: "RABackendLlamaCPPBinary",
             url: "\(binaryBaseURL)/RABackendLLAMACPP-ios-v\(sdkVersion).zip",
-            checksum: "72fe60e1f6166be794035d8c0c5a1f5b98b4b07928b7444c8046d665098d83a7"
+            checksum: "0597442fa030fe6eb69f2f01c63d098e090c0b60469847e2a2614bcf4d32210a"
         ),
         .binaryTarget(
             name: "RABackendONNXBinary",
             url: "\(binaryBaseURL)/RABackendONNX-ios-v\(sdkVersion).zip",
-            checksum: "49d2b74b7786d38fce5de360c1066a49f6ae427b90f2414cdd6e697b88a9d7f0"
+            checksum: "990dd26b4e743a63068c1c107e44e78fb83b234bef4806971da89defb34e2733"
         ),
         .binaryTarget(
             name: "RABackendSherpaBinary",
             url: "\(binaryBaseURL)/RABackendSherpa-ios-v\(sdkVersion).zip",
-            checksum: "95d0621fab7b99200acaca05cd3feceeaf36949751cceafc84e7a1bf7d3cf1ad"
+            checksum: "976029f81edd3ba95cd398fc3c2e6e45b6382ce8d128b0d43f103babab6baa81"
         ),
         .binaryTarget(
             name: "RABackendNeuRTBinary",
             url: "\(binaryBaseURL)/RABackendNeuRT-ios-v\(sdkVersion).zip",
-            checksum: "b68886c1f954809c31b556ee7daaa2ddec52da942857164cc445224333feaa1c"
+            checksum: "bfdd2718523e5b2c3826d0bb18e65e107f8ede6dc615e38c5836d01e21dd69a3"
         ),
         .binaryTarget(
             name: "RABackendMLXBinary",

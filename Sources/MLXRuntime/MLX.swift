@@ -65,7 +65,7 @@ public enum MLX {
     @MainActor private static var isRegistered = false
 
     public static let version = "1.0.0"
-    public static let mlxSwiftLMVersion = "3.31.4"
+    public static let mlxSwiftLMVersion = "3.31.5"
 
     @MainActor public static var isBackendRegistered: Bool {
         isRegistered
@@ -959,6 +959,12 @@ private final class MLXSession: @unchecked Sendable {
                 metrics.totalTimeMs = Int64((info.promptTime + info.generateTime) * 1000)
             case .toolCall:
                 break
+            case .rejectedToolCall(let rejection):
+                // The commons token callback cannot represent structured tool
+                // rejection events. Preserve MLX-LM's fail-closed contract
+                // instead of silently returning an incomplete response. The
+                // public error deliberately excludes rawTextPreview.
+                throw RejectedToolCallError(rejection)
             }
         }
 
@@ -1022,6 +1028,11 @@ private final class MLXSession: @unchecked Sendable {
                 metrics.totalTimeMs = Int64((info.promptTime + info.generateTime) * 1000)
             case .toolCall:
                 break
+            case .rejectedToolCall(let rejection):
+                // Do not leak the rejection's raw model output through logs or
+                // flatten it into ordinary response text. Callers receive the
+                // non-sensitive LocalizedError provided by MLX-LM.
+                throw RejectedToolCallError(rejection)
             }
         }
 
@@ -1387,10 +1398,19 @@ private struct MLXModelConfigHints: Decodable {
     let architecture: String?
     let architectures: [String]?
 
+    /// NeMo exports (every Parakeet and Nemotron ASR checkpoint) carry no
+    /// `model_type` at all. They name the implementing class in `target`, e.g.
+    /// `nemo.collections.asr.models.rnnt_bpe_models.EncDecRNNTBPEModel` — the
+    /// exact string `loadSpeechRecognitionModel` matches on, which until this
+    /// field existed could never appear in the hints and made that branch
+    /// unreachable for every published Parakeet repo.
+    let target: String?
+
     enum CodingKeys: String, CodingKey {
         case modelType = "model_type"
         case architecture
         case architectures
+        case target
     }
 }
 
@@ -1542,6 +1562,9 @@ private func architectureHints(from directory: URL) -> [String] {
         if let architecture = config.architecture {
             hints.append(architecture)
         }
+        if let target = config.target {
+            hints.append(target)
+        }
         hints.append(contentsOf: config.architectures ?? [])
     }
     return hints.map { $0.lowercased() }
@@ -1561,13 +1584,17 @@ private func loadSpeechRecognitionModel(from directory: URL, modelID: String) as
         return try await GLMASRModel.fromModelDirectory(directory)
     }
 
+    // Nemotron is also a NeMo model, so its target contains the broad
+    // `nemo.collections.asr.models` prefix used by Parakeet. Match the more
+    // specific architecture first or every published Nemotron checkpoint is
+    // incorrectly decoded as a Parakeet config.
+    if joinedHints.contains("nemotron") && joinedHints.contains("asr") {
+        return try NemotronASRModel.fromDirectory(directory)
+    }
+
     if joinedHints.contains("parakeet") ||
         joinedHints.contains("nemo.collections.asr.models") {
         return try ParakeetModel.fromDirectory(directory)
-    }
-
-    if joinedHints.contains("nemotron") && joinedHints.contains("asr") {
-        return try NemotronASRModel.fromDirectory(directory)
     }
 
     if joinedHints.contains("whisper") {
