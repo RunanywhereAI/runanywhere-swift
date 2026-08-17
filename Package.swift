@@ -59,14 +59,14 @@ let binaryBaseURL =
 // into RunanywhereAI — we control that org; upstream is pull-only for us — with
 // the EXACT same commit tagged so it can be consumed by version:
 //
-//   https://github.com/RunanywhereAI/mlx-audio-swift  tag 0.1.4
+//   https://github.com/RunanywhereAI/mlx-audio-swift  tag 0.1.5
 //       == Blaizzy/mlx-audio-swift @ 580e952adda0cd6bdc5c04f402822adbb61525c8
 //
-// The tag number is fork-local bookkeeping, NOT upstream 0.1.4 — the commit
+// The tag number is fork-local bookkeeping, NOT upstream 0.1.5 — the commit
 // predates upstream v0.1.3. `.exact` keeps resolution byte-identical to the old
 // revision pin.
 let mlxAudioPackageDependencies: [Package.Dependency] = [
-    .package(url: "https://github.com/RunanywhereAI/mlx-audio-swift.git", exact: "0.1.4"),
+    .package(url: "https://github.com/RunanywhereAI/mlx-audio-swift.git", exact: "0.1.5"),
 ]
 let mlxAudioRuntimeDependencies: [Target.Dependency] = [
     .product(name: "MLXAudioSTT", package: "mlx-audio-swift"),
@@ -75,21 +75,24 @@ let mlxAudioRuntimeDependencies: [Target.Dependency] = [
 ]
 
 // PrismML's Bonsai 1-bit weights need kernels absent from upstream mlx-swift.
-// PrismML-Eng/mlx-swift @ 563961d is the maintained Prism delta on top of
-// upstream mlx-swift 0.31.6, keeping mlx-swift-lm 3.31.x API-compatible while
-// enabling bits=1 / group_size=128 models. Consumed by version rather than
-// `revision:` for the same reason as mlx-audio-swift above, through our mirror:
+// PrismML-Eng/mlx-swift is the maintained Prism delta, keeping mlx-swift-lm
+// 3.31.x API-compatible while enabling bits=1 / group_size=128 models.
+// Consumed by version rather than `revision:` for the same reason as
+// mlx-audio-swift above, through our mirror:
 //
-//   https://github.com/RunanywhereAI/mlx-swift  tag 0.31.7
-//       == PrismML-Eng/mlx-swift @ 563961dfcfd4589755190d285555e4f9eface890
+//   https://github.com/RunanywhereAI/mlx-swift  tag 0.31.8
+//       == 7bf45022ebfe22c20b14b0d648451dbdf5e66bf4
 //
-// 0.31.7 is fork-local bookkeeping, NOT an upstream ml-explore release (their
-// line stops at 0.31.6). It sits inside mlx-swift-lm 3.31.x's
-// `.upToNextMinor(from: "0.31.4")` window, and is deliberately a version that
-// exists ONLY in our mirror: the `mlx-swift` package identity is shared with
-// ml-explore/mlx-swift, so a fork-only version fails loudly instead of silently
-// resolving to upstream without the Prism 1-bit kernels.
-let prismMLXSwiftVersion: Version = "0.31.7"
+// 0.31.8 is fork-local bookkeeping, NOT an upstream ml-explore release. It is
+// deliberately a version that exists ONLY in our mirror: the `mlx-swift`
+// package identity is shared with ml-explore/mlx-swift, so a fork-only
+// version fails loudly instead of silently resolving to upstream without the
+// Prism 1-bit kernels. Keep this in lockstep with runAnywhereMLXSwiftVersion
+// in the monorepo's root Package.swift — this dist repo's manifest is
+// manually maintained, NOT auto-generated from root, so it can drift silently
+// if a dependency bump here is forgotten (this exact drift broke the 0.20.24
+// tag for ~40 minutes before being caught and fixed).
+let prismMLXSwiftVersion: Version = "0.31.8"
 
 let package = Package(
     name: "runanywhere-swift",
@@ -158,7 +161,13 @@ let package = Package(
             url: "https://github.com/RunanywhereAI/mlx-swift.git",
             exact: prismMLXSwiftVersion
         ),
-        .package(url: "https://github.com/ml-explore/mlx-swift-lm", .upToNextMinor(from: "3.31.4")),
+        // Must be the RunanywhereAI fork, exact version, matching root
+        // Package.swift's runAnywhereMLXSwiftLMVersion — see the drift note
+        // above prismMLXSwiftVersion. Pointing this at unforked upstream
+        // ml-explore/mlx-swift-lm (as this line previously did) fails to
+        // resolve MLXRuntime's use of Generation.rejectedToolCall /
+        // RejectedToolCallError, which only exist in the fork.
+        .package(url: "https://github.com/RunanywhereAI/mlx-swift-lm.git", exact: "3.31.5"),
         .package(url: "https://github.com/huggingface/swift-transformers", .upToNextMinor(from: "1.3.0")),
     ] + mlxAudioPackageDependencies,
     targets: [
