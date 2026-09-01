@@ -45,7 +45,7 @@ import PackageDescription
 // Version of the remote XCFramework release archives on runanywhere-sdks.
 // Kept in lockstep with this repo's git tag by the monorepo release tooling
 // (bindings/swift/scripts/sync-checksums.sh).
-let sdkVersion = "0.20.30"
+let sdkVersion = "0.20.32"
 
 let binaryBaseURL =
     "https://github.com/RunanywhereAI/runanywhere-sdks/releases/download/v\(sdkVersion)"
@@ -404,32 +404,32 @@ let package = Package(
         .binaryTarget(
             name: "RACommonsBinary",
             url: "\(binaryBaseURL)/RACommons-ios-v\(sdkVersion).zip",
-            checksum: "81c630305557f189df2d428dbbee167061d51c9832c5b348bde3f430b1c3fb5b"
+            checksum: "ed03b7e1ac6f5a115c0f012850baa3e13856e6dcf05562faa16119686f614f66"
         ),
         .binaryTarget(
             name: "RABackendLlamaCPPBinary",
             url: "\(binaryBaseURL)/RABackendLLAMACPP-ios-v\(sdkVersion).zip",
-            checksum: "7062f7c8da988e6aee323efbb03f09b70cde7956138191e82720b81c7ed90a2b"
+            checksum: "baab28bbe22de196b9442cb17895142b2a8a80fa951c8a796bf4d4eb3256e9c6"
         ),
         .binaryTarget(
             name: "RABackendONNXBinary",
             url: "\(binaryBaseURL)/RABackendONNX-ios-v\(sdkVersion).zip",
-            checksum: "990dd26b4e743a63068c1c107e44e78fb83b234bef4806971da89defb34e2733"
+            checksum: "33aa8ebe41cfa07abdb55e1bfd693fadcfa1645a4aaf592e1222171de0323961"
         ),
         .binaryTarget(
             name: "RABackendSherpaBinary",
             url: "\(binaryBaseURL)/RABackendSherpa-ios-v\(sdkVersion).zip",
-            checksum: "976029f81edd3ba95cd398fc3c2e6e45b6382ce8d128b0d43f103babab6baa81"
+            checksum: "64955f767e0302ced5f9b9283d48cf37a7c8d1a77fc066712ffdf471ee9715cc"
         ),
         .binaryTarget(
             name: "RABackendNeuRTBinary",
             url: "\(binaryBaseURL)/RABackendNeuRT-ios-v\(sdkVersion).zip",
-            checksum: "57d9e8487acc77b02d07c426094ffb92719d1f0312cd2452402670c9cc6ddb39"
+            checksum: "393221748af1f14a1f5a6faa4546c26bf053aff37cf9737aec3399881a73a412"
         ),
         .binaryTarget(
             name: "RABackendMLXBinary",
             url: "\(binaryBaseURL)/RABackendMLX-ios-v\(sdkVersion).zip",
-            checksum: "0802fe58480c3e03e94498d46adb50fda7b9ade491807c7e0392a7fd68b83b59"
+            checksum: "c0fa8f3b5312e699c0bc37c648a4bcf0ff6b4634af1c874b74daf5aacc18e345"
         ),
     ],
     cxxLanguageStandard: .cxx20

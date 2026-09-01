@@ -157,8 +157,9 @@ public nonisolated struct RAEmbeddingsOptions: Sendable {
 
   /// What the vector will be used for. Asymmetric embedders (bge, e5,
   /// nomic-embed, gte, EmbeddingGemma) prepend a different prompt for a query
-  /// than for a document. The prefix table must be added to the model manifest
-  /// as part of honouring this field; it does not exist today. A bundle that
+  /// than for a document. Honouring this requires a prefix table in the model
+  /// manifest: NeuRT bundles carry one (Nemotron-3-Embed-1B declares "query: "
+  /// and "passage: ") and honour this field as of plugin ABI v10. A bundle that
   /// declares no prompts ignores input_type and returns the identical vector
   /// for QUERY and DOCUMENT — it never errors.
   public var inputType: RAEmbeddingsInputType = .unspecified
