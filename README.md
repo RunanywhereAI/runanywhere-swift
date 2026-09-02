@@ -21,7 +21,7 @@ or the engine sources.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/RunanywhereAI/runanywhere-swift.git", from: "0.20.35"),
+    .package(url: "https://github.com/RunanywhereAI/runanywhere-swift.git", from: "0.20.36"),
 ]
 ```
 
@@ -104,8 +104,8 @@ pinned by SHA-256 in `Package.swift`. SwiftPM downloads and verifies them on
 
 ## Versioning
 
-This repository's tags track the RunAnywhere SDK version exactly. Tag `0.20.35`
-here consumes the binaries from `runanywhere-sdks` release `v0.20.35`.
+This repository's tags track the RunAnywhere SDK version exactly. Tag `0.20.36`
+here consumes the binaries from `runanywhere-sdks` release `v0.20.36`.
 
 ## License
 

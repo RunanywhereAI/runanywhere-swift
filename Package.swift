@@ -45,7 +45,7 @@ import PackageDescription
 // Version of the remote XCFramework release archives on runanywhere-sdks.
 // Kept in lockstep with this repo's git tag by the monorepo release tooling
 // (bindings/swift/scripts/sync-checksums.sh).
-let sdkVersion = "0.20.35"
+let sdkVersion = "0.20.36"
 
 let binaryBaseURL =
     "https://github.com/RunanywhereAI/runanywhere-sdks/releases/download/v\(sdkVersion)"
@@ -404,7 +404,7 @@ let package = Package(
         .binaryTarget(
             name: "RACommonsBinary",
             url: "\(binaryBaseURL)/RACommons-ios-v\(sdkVersion).zip",
-            checksum: "71377399180991ad1e614dca49d7cfd4612a24caf44a04f5ed1f96dd966f0172"
+            checksum: "0c79feb81861c16272e2718facddedb5ca593a1442624da0daaba147f50b19d3"
         ),
         .binaryTarget(
             name: "RABackendLlamaCPPBinary",

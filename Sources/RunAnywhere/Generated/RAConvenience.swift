@@ -131,6 +131,7 @@ extension RAModelCategory {
         case .speakerDiarization: return "speaker-diarization"
         case .semanticSegmentation: return "semantic-segmentation"
         case .rerank: return "rerank"
+        case .ocr: return "ocr"
         default: return ""
         }
     }
@@ -154,6 +155,7 @@ extension RAModelCategory {
         case "speaker-diarization": return .speakerDiarization
         case "semantic-segmentation": return .semanticSegmentation
         case "rerank": return .rerank
+        case "ocr": return .ocr
         default: return nil
         }
     }
@@ -634,6 +636,36 @@ extension RALoraAdapterCatalogEntry {
     }
 }
 
+extension RAOCRImage {
+    /// Generated from `(runanywhere.v1.rac_required / rac_min / rac_max / rac_min_float / rac_max_float)` annotations in idl/.
+    public func validate() throws {
+        if width == 0 {
+            throw SDKException.validationFailed(
+                fieldPath: "OCRImage.width",
+                message: "width is required"
+            )
+        }
+        if width < 1 || width > 8192 {
+            throw SDKException.validationFailed(
+                fieldPath: "OCRImage.width",
+                message: "width must be in 1...8192 (got \(width))"
+            )
+        }
+        if height == 0 {
+            throw SDKException.validationFailed(
+                fieldPath: "OCRImage.height",
+                message: "height is required"
+            )
+        }
+        if height < 1 || height > 8192 {
+            throw SDKException.validationFailed(
+                fieldPath: "OCRImage.height",
+                message: "height must be in 1...8192 (got \(height))"
+            )
+        }
+    }
+}
+
 extension RARAGConfiguration {
     /// Generated from `(runanywhere.v1.rac_default)` annotations in idl/.
     public static func defaults() -> RARAGConfiguration {
@@ -864,6 +896,7 @@ extension RASDKComponent {
         case .speakerDiarization: return "speaker_diarization"
         case .semanticSegmentation: return "semantic_segmentation"
         case .rerank: return "rerank"
+        case .ocr: return "ocr"
         default: return ""
         }
     }
@@ -888,6 +921,7 @@ extension RASDKComponent {
         case "speaker_diarization": return .speakerDiarization
         case "semantic_segmentation": return .semanticSegmentation
         case "rerank": return .rerank
+        case "ocr": return .ocr
         default: return nil
         }
     }
