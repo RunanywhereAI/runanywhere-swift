@@ -53,8 +53,16 @@ public nonisolated struct RASdkInitPhase1Request: Sendable {
 
   public var sdkVersion: String = String()
 
-  /// Caller override for NetworkDefaults.request_timeout_ms. Unset = the pool
-  /// default (60000). openai-python / anthropic-python `timeout`.
+  /// Intended as a caller override for NetworkDefaults.request_timeout_ms,
+  /// modelled on openai-python / anthropic-python `timeout`.
+  ///
+  /// NOT HONORED YET. Nothing sets this field and nothing reads it: commons
+  /// parses SdkInitPhase1Request without consulting it, and each transport
+  /// uses the compile-time pool value instead (Swift
+  /// URLSessionHttpTransport.swift reads RADefaults.Network.requestTimeoutMs).
+  /// The pool default applies whatever a caller puts here. Same spirit as the
+  /// note on NetworkDefaults.max_retries: declaring the field does not switch
+  /// the behaviour on.
   public var requestTimeoutMs: Int32 {
     get {_requestTimeoutMs ?? 0}
     set {_requestTimeoutMs = newValue}
@@ -64,9 +72,14 @@ public nonisolated struct RASdkInitPhase1Request: Sendable {
   /// Clears the value of `requestTimeoutMs`. Subsequent reads from it will return its default value.
   public mutating func clearRequestTimeoutMs() {self._requestTimeoutMs = nil}
 
-  /// Caller override for NetworkDefaults.max_retries. Unset = the pool
-  /// default (3). openai-python / anthropic-python `max_retries`; 0 disables
-  /// retries.
+  /// Intended as a caller override for NetworkDefaults.max_retries, modelled
+  /// on openai-python / anthropic-python `max_retries`.
+  ///
+  /// NOT HONORED YET, and the gap is wider than for request_timeout_ms
+  /// because retries exist on exactly one platform: Web's download-poll loop
+  /// (SDKCore.ts) reads the compile-time `networkDefaults.maxRetries`, never
+  /// this field, so a caller cannot raise, lower, or disable retries through
+  /// it. Read `0 disables retries` as the intent, not the current behaviour.
   public var maxRetries: Int32 {
     get {_maxRetries ?? 0}
     set {_maxRetries = newValue}

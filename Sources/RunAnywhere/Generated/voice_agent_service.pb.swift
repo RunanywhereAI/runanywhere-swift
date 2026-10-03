@@ -322,6 +322,11 @@ public nonisolated struct RAVoiceAgentComposeConfig: @unchecked Sendable {
   /// Clears the value of `vadConfig`. Subsequent reads from it will return its default value.
   public mutating func clearVadConfig() {_uniqueStorage()._vadConfig = nil}
 
+  /// NOT HONORED YET either: make_voice_llm_options() builds the voice LLM options
+  /// from compile-time constants and takes no argument, so none of these
+  /// reach the LLM. The note on `instructions` below says
+  /// llm_generation.system_prompt is ignored here, which is true, but so is
+  /// the rest of the message.
   public var llmGeneration: RALLMGenerationOptions {
     get {_storage._llmGeneration ?? RALLMGenerationOptions()}
     set {_uniqueStorage()._llmGeneration = newValue}
@@ -331,13 +336,17 @@ public nonisolated struct RAVoiceAgentComposeConfig: @unchecked Sendable {
   /// Clears the value of `llmGeneration`. Subsequent reads from it will return its default value.
   public mutating func clearLlmGeneration() {_uniqueStorage()._llmGeneration = nil}
 
-  /// System prompt for the agent. Governs persona AND spoken delivery
+  /// Intended as the system prompt for the agent: persona AND spoken delivery
   /// ("talk quickly", "sound warm"), not just content. Same name and role as
-  /// OpenAI Realtime `session.instructions`. Unset uses the commons voice
-  /// default (short, spoken, no markdown).
+  /// OpenAI Realtime `session.instructions`.
   ///
-  /// This is the only system prompt the voice path reads:
-  /// llm_generation.system_prompt is IGNORED here.
+  /// NOT HONORED YET. config_from_proto (voice_agent_internal_helpers.cpp)
+  /// translates this message into rac_voice_agent_config_t and never reads
+  /// this field, and nothing else reads it either. Every turn gets the
+  /// compile-time kVoiceAgentSystemPrompt that make_voice_llm_options()
+  /// hardcodes, so the commons voice default is not merely what you get when
+  /// this is unset, it is what you get regardless. Honoring it needs a slot
+  /// on rac_voice_agent_llm_config_t, which has none today.
   public var instructions: String {
     get {_storage._instructions ?? String()}
     set {_uniqueStorage()._instructions = newValue}

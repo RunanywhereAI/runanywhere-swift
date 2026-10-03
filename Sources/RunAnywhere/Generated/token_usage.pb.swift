@@ -73,6 +73,11 @@ public nonisolated struct RATokenUsage: Sendable {
   /// the counts are engine-measured.
   public var countsEstimated: Bool = false
 
+  /// Input tokens reused from a backend prompt/KV cache. Included in
+  /// input_tokens and total_tokens; 0 when no cache was reused or the backend
+  /// does not report cache accounting.
+  public var cachedInputTokens: Int32 = 0
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -84,7 +89,7 @@ fileprivate nonisolated let _protobuf_package = "runanywhere.v1"
 
 nonisolated extension RATokenUsage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".TokenUsage"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}input_tokens\0\u{3}output_tokens\0\u{3}total_tokens\0\u{3}decode_tokens_per_second\0\u{3}prefill_ms\0\u{3}ttft_ms\0\u{3}time_to_first_content_token_ms\0\u{3}content_tokens_per_second\0\u{3}batch_buffered\0\u{3}counts_estimated\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}input_tokens\0\u{3}output_tokens\0\u{3}total_tokens\0\u{3}decode_tokens_per_second\0\u{3}prefill_ms\0\u{3}ttft_ms\0\u{3}time_to_first_content_token_ms\0\u{3}content_tokens_per_second\0\u{3}batch_buffered\0\u{3}counts_estimated\0\u{3}cached_input_tokens\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -102,6 +107,7 @@ nonisolated extension RATokenUsage: SwiftProtobuf.Message, SwiftProtobuf._Messag
       case 8: try { try decoder.decodeSingularDoubleField(value: &self.contentTokensPerSecond) }()
       case 9: try { try decoder.decodeSingularBoolField(value: &self.batchBuffered) }()
       case 10: try { try decoder.decodeSingularBoolField(value: &self.countsEstimated) }()
+      case 11: try { try decoder.decodeSingularInt32Field(value: &self.cachedInputTokens) }()
       default: break
       }
     }
@@ -138,6 +144,9 @@ nonisolated extension RATokenUsage: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if self.countsEstimated != false {
       try visitor.visitSingularBoolField(value: self.countsEstimated, fieldNumber: 10)
     }
+    if self.cachedInputTokens != 0 {
+      try visitor.visitSingularInt32Field(value: self.cachedInputTokens, fieldNumber: 11)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -152,6 +161,7 @@ nonisolated extension RATokenUsage: SwiftProtobuf.Message, SwiftProtobuf._Messag
     if lhs.contentTokensPerSecond != rhs.contentTokensPerSecond {return false}
     if lhs.batchBuffered != rhs.batchBuffered {return false}
     if lhs.countsEstimated != rhs.countsEstimated {return false}
+    if lhs.cachedInputTokens != rhs.cachedInputTokens {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
